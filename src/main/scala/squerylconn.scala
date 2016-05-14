@@ -1,6 +1,6 @@
 
 import org.squeryl.PrimitiveTypeMode._
-import org.squeryl.{Schema, Session}
+import org.squeryl.{Schema, Session, SessionFactory}
 import org.squeryl.adapters.PostgreSqlAdapter
 
 
@@ -11,13 +11,15 @@ object squerylconn extends App {
 
   println("Starting squryl")
   Class.forName("org.postgresql.Driver")
-  val session = Session.create(java.sql.DriverManager.getConnection("jdbc:postgresql://localhost:5432/appdb",
-    "postgres", "postgres"), new PostgreSqlAdapter)
-  using(session) {
-    import Library._
-    create
+  SessionFactory.concreteFactory = Some(() =>
+    Session.create(java.sql.DriverManager.getConnection("jdbc:postgresql://localhost:5432/appdb",
+      "postgres", "postgres"), new PostgreSqlAdapter))
 
-    }
+  transaction {
+      import Library._
+      printDdl
+      users.map(s => println(s.name))
+  }
 
 
 }

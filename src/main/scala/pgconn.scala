@@ -15,7 +15,7 @@ object pgconn extends App {
     val rs = stm.executeQuery("select * from \"Users\" where \"id\" > '1'")
 
     while(rs.next) {
-      println(rs.toString)
+      println(rs.getArray(2))
     }
   } finally {
     conn.close()
