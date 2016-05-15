@@ -17,8 +17,10 @@ object squerylconn extends App {
 
   transaction {
       import Library._
+      //Prints schema to standard output
       printDdl
-      users.map(s => println(s.name))
+      //get
+      users.map(s => println(s"${s.id} -> ${s.name}"))
   }
 
 
